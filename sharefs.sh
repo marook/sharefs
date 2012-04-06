@@ -38,21 +38,13 @@ case "$1" in
 	ensureNotExisting "$targetDir"
 	ensureNotExisting "$shadowDir"
 
-	ssh "$remoteAccount" "test -e $remoteDir" && fail "Remote directory already exists: $remoteDst"
-
-	# TODO validate remote dst not yet exists
+	ssh "$remoteAccount" "mkdir $remoteDir" || fail "Failed to create remote directory: $remoteDst"
 
 	mkdir "$targetDir"
 	mkdir "$shadowDir"
 	mkdir "$dataDir"
 
 	echo "remoteDst=$remoteDst" > $configFile
-
-	# TODO create remote dst
-
-	echo "shadow: $shadowDir"
-
-	# TODO
 	;;
     mount)
 	# mount a shared directory
