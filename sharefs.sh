@@ -1,3 +1,5 @@
+set -e
+
 fail()
 {
     echo "$1" >&2
@@ -30,6 +32,7 @@ calcLocationVariables()
     targetName=`basename "$targetDir"`
     shadowDir=$targetDir/../.$targetName.sharefs
     configFile=$shadowDir/config
+    pidFile=$shadowDir/lock.pid
 
     dataDir=$shadowDir/data
     if [ -e "$dataDir" ]
@@ -117,7 +120,25 @@ case "$1" in
 
 	loadConfig
 
+	if [ -e "$pidFile" ]
+	then
+	    lockPid=`cat $pidFile`
+	    fail "Process with ID $lockPid is already synchronizing"
+	fi
+
+	function cleanup()
+	{
+	    rm -f -- "$pidFile"
+	}
+	trap cleanup 0
+
+	echo "$BASHPID" > "$pidFile"
+
+	sleep 10
+
 	rsync -az -e ssh "$dataDir" "$remoteDst"
+
+	cleanup
 	;;
     *)
 	fail "Unknwon command \"$1\""
