@@ -1,4 +1,51 @@
-1) Synching via crontab
+sharefs
+
+1) Introduction
+2) PreAlpha Warning
+2) Usage
+3) Synchronizing
+3) Synching via crontab
+
+
+---------------------------------------------------------------------------
+Introduction
+
+sharefs is a tool to synchronize user space file systems remotly.
+
+
+---------------------------------------------------------------------------
+PreAlpha Warning
+
+This software is far away from stable. I'm not using this script for my real
+data and so should you! If sharefs loses you files it's your fault :-)
+
+
+---------------------------------------------------------------------------
+Usage
+
+The following guide takes you through the steps of setting up a sharefs file
+system. The first step is to create a sharefs file system:
+
+$ sharefs create local/path user@remote.host.com:/remote/path
+
+Now you can mount the sharefs file system. When mounting for the first time you
+have to enter a password for the file system.
+
+$ sharefs mount local/path
+
+Unmounting the file system works the same way.
+
+$ sharefs umount local/path
+
+
+---------------------------------------------------------------------------
+Synchronizing
+
+Right now "synchronizing" is only pushing your local files to the remote host.
+Synchronizing is triggered through the sharefs script:
+
+$ sharefs sync local/path
+
 
 ---------------------------------------------------------------------------
 Synching via crontab
