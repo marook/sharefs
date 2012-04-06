@@ -56,6 +56,6 @@ a crontab entry.
 $ crontab -e
 
 Then enter something like this to synchronize the sharefs target
-/home/user/mydir every hour:
+/home/user/mydir every ten minutes:
 
-0 * * * *	$HOME/bin/sharefs sync /home/user/mydir
+*/10 * * * *	$HOME/bin/sharefs sync /home/user/mydir
