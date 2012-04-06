@@ -5,13 +5,30 @@ fail()
 }
 
 case "$1" in
-mount)
+    create)
+	# create a shared directory
+	# $ sharefs create targetDir [user@]host[:dir]
 
-;;
-unmount)
+	# TODO
+	;;
+    mount)
+	# mount a shared directory
+	# $ sharefs mount targetDir
 
-;;
-*)
+	# TODO
+	;;
+    umount)
+	# $ sharefs umount targetDir
+
+	# TODO
+	;;
+    sync)
+	# synchronize changes between local host and server
+	# $ sharefs sync targetDir
+
+	# TODO
+	;;
+    *)
 	fail "Unknwon command \"$1\""
-;;
+	;;
 esac
