@@ -22,7 +22,7 @@ ensureNotExisting()
 
 calcLocationVariables()
 {
-    if [ -e "targetDir" ]
+    if [ -e "$targetDir" ]
     then
 	targetDir=`cd "$targetDir" ; pwd`
     fi
@@ -117,7 +117,7 @@ case "$1" in
 
 	loadConfig
 
-	rsync -avz -e ssh "$dataDir" "$remoteDst"
+	rsync -az -e ssh "$dataDir" "$remoteDst"
 	;;
     *)
 	fail "Unknwon command \"$1\""
