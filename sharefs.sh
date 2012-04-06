@@ -22,11 +22,20 @@ ensureNotExisting()
 
 calcLocationVariables()
 {
-    targetDir=`cd "$targetDir" ; pwd`
+    if [ -e "targetDir" ]
+    then
+	targetDir=`cd "$targetDir" ; pwd`
+    fi
+
     targetName=`basename "$targetDir"`
     shadowDir=$targetDir/../.$targetName.sharefs
     configFile=$shadowDir/config
-    dataDir=`cd "$shadowDir/data" ; pwd`
+
+    dataDir=$shadowDir/data
+    if [ -e "$dataDir" ]
+    then
+	dataDir=`cd "$dataDir" ; pwd`
+    fi
 }
 
 calcRemoteVariables()
@@ -102,7 +111,13 @@ case "$1" in
 	# synchronize changes between local host and server
 	# $ sharefs sync targetDir
 
-	# TODO
+	targetDir=$2
+
+	# TODO validate arguments
+
+	loadConfig
+
+	rsync -avz -e ssh "$dataDir" "$remoteDst"
 	;;
     *)
 	fail "Unknwon command \"$1\""
