@@ -1,0 +1,14 @@
+1) Synching via crontab
+
+---------------------------------------------------------------------------
+Synching via crontab
+
+You can frequently synchronize you local version with the server by implementing
+a crontab entry.
+
+$ crontab -e
+
+Then enter something like this to synchronize the sharefs target
+/home/user/mydir every hour:
+
+0 * * * *	$HOME/bin/sharefs sync /home/user/mydir
