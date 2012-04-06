@@ -134,8 +134,6 @@ case "$1" in
 
 	echo "$BASHPID" > "$pidFile"
 
-	sleep 10
-
 	rsync -az -e ssh "$dataDir" "$remoteDst"
 
 	cleanup
