@@ -2,9 +2,10 @@ sharefs
 
 1) Introduction
 2) PreAlpha Warning
-3) Usage
-4) Synchronizing
-5) Synching via crontab
+3) Installation
+4) Usage
+5) Synchronizing
+6) Synching via crontab
 
 
 ---------------------------------------------------------------------------
@@ -18,6 +19,14 @@ PreAlpha Warning
 
 This software is far away from stable. I'm not using this script for my real
 data and so should you! If sharefs loses you files it's your fault :-)
+
+
+---------------------------------------------------------------------------
+Installation
+
+$ git clone git@github.com:marook/sharefs.git
+$ cd sharefs
+$ sudo make install
 
 
 ---------------------------------------------------------------------------
