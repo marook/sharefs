@@ -2,10 +2,11 @@ sharefs
 
 1) Introduction
 2) PreAlpha Warning
-3) Installation
-4) Usage
-5) Synchronizing
-6) Synching via crontab
+3) Requirements
+4) Installation
+5) Usage
+6) Synchronizing
+7) Synching via crontab
 
 
 ---------------------------------------------------------------------------
@@ -19,6 +20,19 @@ PreAlpha Warning
 
 This software is far away from stable. I'm not using this script for my real
 data and so should you! If sharefs loses you files it's your fault :-)
+
+
+---------------------------------------------------------------------------
+Requirements
+
+On the client:
+* ssh
+* encfs
+* rsync
+
+On the server:
+* sshd
+* rsync
 
 
 ---------------------------------------------------------------------------
