@@ -136,7 +136,7 @@ case "$1" in
 
 	echo "$BASHPID" > "$pidFile"
 
-	rsync -az -e ssh "$dataDir" "$remoteDst"
+	rsync -az -e ssh --bwlimit 100 "$dataDir" "$remoteDst"
 
 	cleanup
 	;;
