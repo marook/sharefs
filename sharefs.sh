@@ -2,9 +2,20 @@
 
 set -e
 
+#==========================================================================
 # the following constants can be overwritten in configuration files
+
 ENCFS_OPTS=--standard
+
 RSYNC_OPTS=-az
+
+# flags whether synchronization should be executed while on battery power
+# 0: only sync while on AC
+# 1: always sync
+SYNC_ON_BATTERY=0
+
+# end of constants
+#==========================================================================
 
 fail()
 {
@@ -153,7 +164,12 @@ case "$1" in
 
 	echo "$BASHPID" > "$pidFile"
 
-	rsync $RSYNC_OPTS -e ssh "$dataDir" "$remoteDst"
+	if [ "$SYNC_ON_BATTERY" == '1' -o `cat "/sys/class/power_supply/AC/online"` == "1" ]
+	then
+	    rsync $RSYNC_OPTS -e ssh "$dataDir" "$remoteDst"
+	else
+	    echo "Not synchronizing while on battery."
+	fi
 
 	cleanup
 	;;
