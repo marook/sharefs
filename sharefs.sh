@@ -2,6 +2,10 @@
 
 set -e
 
+# the following constants can be overwritten in configuration files
+ENCFS_OPTS=--standard
+RSYNC_OPTS=-az
+
 fail()
 {
     echo "$1" >&2
@@ -54,7 +58,18 @@ calcRemoteVariables()
     fi
 }
 
-loadConfig()
+loadSystemConfig()
+{
+    for configFile in /etc/defaults/sharefs.conf ~/.sharefs/config
+    do
+	if [ -e "$configFile" ]
+	then
+	    . "$configFile"
+	fi
+    done
+}
+
+loadShareConfig()
 {
     calcLocationVariables
 
@@ -64,6 +79,8 @@ loadConfig()
 
     calcRemoteVariables
 }
+
+loadSystemConfig
 
 case "$1" in
     create)
@@ -97,9 +114,9 @@ case "$1" in
 
 	# TODO validate arguments
 
-	loadConfig
+	loadShareConfig
 
-	encfs --standard "$dataDir" "$targetDir"
+	encfs $ENCFS_OPTS "$dataDir" "$targetDir"
 	;;
     umount)
 	# $ sharefs umount targetDir
@@ -108,7 +125,7 @@ case "$1" in
 
 	# TODO validate arguments
 
-	loadConfig
+	loadShareConfig
 
 	fusermount -u "$targetDir"
 	;;
@@ -120,7 +137,7 @@ case "$1" in
 
 	# TODO validate arguments
 
-	loadConfig
+	loadShareConfig
 
 	if [ -e "$pidFile" ]
 	then
@@ -136,7 +153,7 @@ case "$1" in
 
 	echo "$BASHPID" > "$pidFile"
 
-	rsync -az -e ssh "$dataDir" "$remoteDst"
+	rsync $RSYNC_OPTS -e ssh "$dataDir" "$remoteDst"
 
 	cleanup
 	;;
