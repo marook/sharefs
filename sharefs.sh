@@ -153,7 +153,11 @@ case "$1" in
 	if [ -e "$pidFile" ]
 	then
 	    lockPid=`cat $pidFile`
-	    fail "Process with ID $lockPid is already synchronizing"
+
+            if ps -p "$lockPid" > /dev/null
+            then
+	        fail "Process with ID $lockPid is already synchronizing"
+            fi
 	fi
 
 	function cleanup()
