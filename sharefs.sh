@@ -24,6 +24,18 @@ fail()
     exit 1
 }
 
+print_usage()
+{
+    echo "usage: $0 <command>"
+    echo ''
+    echo "The supported commands are"
+    echo "  $0 create target/dir [user@]host[:dir]"
+    echo "  $0 mount target/dir"
+    echo "  $0 umount target/dir"
+    echo "  $0 sync target/dir"
+    echo "  $0 help"
+}
+
 ensureExisting(){
     if [ ! -e "$1" ]
     then
@@ -177,7 +189,11 @@ case "$1" in
 
 	cleanup
 	;;
+    help)
+        print_usage
+        ;;
     *)
 	fail "Unknwon command \"$1\""
+        print_usage
 	;;
 esac
