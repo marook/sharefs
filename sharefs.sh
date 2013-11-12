@@ -150,7 +150,7 @@ case "$1" in
 
 	echo "remoteDst=$remoteDst" > $configFile
 
-	rsync $RSYNC_OPTS -h --progress -e ssh "$remoteDst" "$dataDir"
+	rsync $RSYNC_OPTS -h --progress -e ssh "$remoteDst/data" "$dataDir/data"
         ;;
     mount)
 	# mount a shared directory
