@@ -30,6 +30,7 @@ print_usage()
     echo ''
     echo "The supported commands are"
     echo "  $0 create target/dir [user@]host[:dir]"
+    echo "  $0 recreate target/dir [user@]host[:dir]"
     echo "  $0 mount target/dir"
     echo "  $0 umount target/dir"
     echo "  $0 sync target/dir"
@@ -129,6 +130,28 @@ case "$1" in
 
 	echo "remoteDst=$remoteDst" > $configFile
 	;;
+    recreate)
+        # recreate shared directory from remote backup
+
+        targetDir=$2
+        remoteDst=$3
+
+        # TODO validate arguments
+
+	calcLocationVariables
+	calcRemoteVariables
+
+	ensureNotExisting "$targetDir"
+	ensureNotExisting "$shadowDir"
+        
+	mkdir "$targetDir"
+	mkdir "$shadowDir"
+	mkdir "$dataDir"
+
+	echo "remoteDst=$remoteDst" > $configFile
+
+	rsync $RSYNC_OPTS -h --progress -e ssh "$remoteDst" "$dataDir"
+        ;;
     mount)
 	# mount a shared directory
 	# $ sharefs mount targetDir
