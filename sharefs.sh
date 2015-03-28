@@ -17,15 +17,15 @@ SYNC_ON_BATTERY=0
 # end of constants
 #==========================================================================
 
-fail()
-{
+AC_ONLINE_PATH="/sys/class/power_supply/AC/online"
+
+fail(){
     echo "$1" >&2
     echo "Aborting" >&2
     exit 1
 }
 
-print_usage()
-{
+print_usage(){
     echo "usage: $0 <command>"
     echo ''
     echo "The supported commands are"
@@ -44,16 +44,14 @@ ensureExisting(){
     fi
 }
 
-ensureNotExisting()
-{
+ensureNotExisting(){
     if [ -e "$1" ]
     then
 	fail "$1 already existing"
     fi
 }
 
-calcLocationVariables()
-{
+calcLocationVariables(){
     if [ -e "$targetDir" ]
     then
 	targetDir=`cd "$targetDir" ; pwd`
@@ -71,8 +69,7 @@ calcLocationVariables()
     fi
 }
 
-calcRemoteVariables()
-{
+calcRemoteVariables(){
     remoteAccount=`echo $remoteDst | sed 's/\([^:]*\):\(.*\)/\1/'`
     remoteDir=`echo $remoteDst | sed 's/\([^:]*\):\(.*\)/\2/'`
 
@@ -82,8 +79,7 @@ calcRemoteVariables()
     fi
 }
 
-loadSystemConfig()
-{
+loadSystemConfig(){
     for configFile in /etc/defaults/sharefs.conf ~/.sharefs/config
     do
 	if [ -e "$configFile" ]
@@ -93,8 +89,7 @@ loadSystemConfig()
     done
 }
 
-loadShareConfig()
-{
+loadShareConfig(){
     calcLocationVariables
 
     ensureExisting "$configFile"
@@ -105,6 +100,10 @@ loadShareConfig()
 }
 
 loadSystemConfig
+
+do_sync(){
+    rsync $RSYNC_OPTS -e ssh "$dataDir" "$remoteDst"
+}
 
 case "$1" in
     create)
@@ -203,9 +202,12 @@ case "$1" in
 
 	echo "$BASHPID" > "$pidFile"
 
-	if [ "$SYNC_ON_BATTERY" == '1' -o `cat "/sys/class/power_supply/AC/online"` == "1" ]
-	then
-	    rsync $RSYNC_OPTS -e ssh "$dataDir" "$remoteDst"
+	if [ ! -e "${AC_ONLINE_PATH}" ]
+        then
+            do_sync
+        elif [ "$SYNC_ON_BATTERY" == '1' -o `cat "${AC_ONLINE_PATH}"` == "1" ]
+        then
+            do_sync
 	else
 	    echo "Not synchronizing while on battery."
 	fi
