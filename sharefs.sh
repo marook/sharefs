@@ -7,7 +7,7 @@ set -e
 
 ENCFS_OPTS="--standard"
 
-RSYNC_OPTS="-az --bwlimit 100"
+RSYNC_OPTS="-az --bwlimit 100 --inplace"
 
 # flags whether synchronization should be executed while on battery power
 # 0: only sync while on AC
